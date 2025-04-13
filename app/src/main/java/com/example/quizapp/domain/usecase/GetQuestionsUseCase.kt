@@ -1,14 +1,17 @@
 package com.example.quizapp.domain.usecase
 
 import com.example.quizapp.data.local.Question
-import com.example.quizapp.data.repository.QuizRepository
+import com.example.quizapp.domain.QuizRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetQuestionsUseCase @Inject constructor(
     private val repository: QuizRepository
-){
-
-    suspend operator fun invoke(category: String): List<Question>{
-        return repository.getQuestions(category)
+) {
+    operator fun invoke(category: String): Flow<List<Question>> {
+        if (category.isBlank()) {
+            throw IllegalArgumentException("Category cannot be empty")
+        }
+        return repository.getQuestionsByCategory(category)
     }
 }

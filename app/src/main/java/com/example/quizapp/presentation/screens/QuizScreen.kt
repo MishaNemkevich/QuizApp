@@ -1,7 +1,5 @@
 package com.example.quizapp.presentation.screens
 
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -10,30 +8,32 @@ import com.example.quizapp.presentation.viewmodel.QuizViewModel
 
 @Composable
 fun QuizScreen(
-    viewModel: QuizViewModel = hiltViewModel(),
-    category: String
+    category: String,
+    viewModel: QuizViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = category) {
         viewModel.loadQuestions(category)
     }
 
     when {
-        uiState.isLoading -> CircularProgressIndicator()
-        uiState.error != null -> Text("Ошибка: ${uiState.error}")
-        else -> {
-            val currentQuestion = uiState.questions.getOrNull(uiState.currentQuestionIndex)
-            if (currentQuestion != null) {
-                QuestionView(
-                    question = currentQuestion,
-                    onAnswerSelected = { answerIndex ->
-                        viewModel.checkAnswer(answerIndex)
-                    }
-                )
-            } else {
-                QuizResultView(score = uiState.score)
+        uiState.isLoading -> FullScreenLoader()
+        uiState.error != null -> ErrorScreen(uiState.error)
+        uiState.isQuizFinished -> QuizResultScreen(
+            score = uiState.score,
+            totalQuestions = uiState.questions.size,
+            onRestart = { viewModel.resetQuiz() },
+            onBackToCategories = { /* Навигация назад */ }
+        )
+        else -> QuestionView (
+            question = uiState.questions[uiState.currentQuestionIndex],
+            questionNumber = uiState.currentQuestionIndex + 1,
+            totalQuestions = uiState.questions.size,
+            score = uiState.score,
+            onAnswerSelected = { answerIndex ->
+                viewModel.checkAnswer(answerIndex)
             }
-        }
+        )
     }
 }
