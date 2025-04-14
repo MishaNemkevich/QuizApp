@@ -1,8 +1,12 @@
 package com.example.quizapp.presentation.viewmodel
 
 import android.util.Log
-import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material.icons.Icons
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapp.domain.model.Category
@@ -33,13 +37,12 @@ class CategoriesViewModel @Inject constructor(
 
     private fun loadCategories() {
         viewModelScope.launch {
-            // Сначала заполняем БД начальными данными
+
             seedDatabaseUseCase()
 
-            // Затем загружаем категории
             getCategoriesUseCase()
                 .catch { e ->
-                    // Обработка ошибок
+
                     Log.e("CategoriesViewModel", "Error loading categories", e)
                 }
                 .collect { categories ->

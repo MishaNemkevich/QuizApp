@@ -45,6 +45,11 @@ android {
 
 dependencies {
 
+    implementation (libs.androidx.material)
+    implementation (libs.androidx.material.icons.core)
+    implementation (libs.material.icons.extended)
+    implementation (libs.material3)
+    implementation (libs.androidx.material3.window.size.class1)
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
     kapt (libs.hilt.compiler)

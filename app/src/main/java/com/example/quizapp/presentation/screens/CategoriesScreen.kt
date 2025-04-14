@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.quizapp.domain.model.Category
 import com.example.quizapp.presentation.viewmodel.CategoriesViewModel
 
 @Composable
@@ -22,8 +23,8 @@ fun CategoriesScreen(
     navController: NavController,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
-    val categories by viewModel.categories.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val categories = viewModel.categories.collectAsState()
+    val isLoading = viewModel.isLoading.collectAsState().value
 
     if (isLoading) {
         FullScreenLoader()
@@ -60,7 +61,7 @@ fun CategoriesScreen(
 
 @Composable
 fun CategoryCard(
-    category: Int,
+    category: Category,
     onClick: () -> Unit
 ) {
     Card(
