@@ -9,9 +9,6 @@ class GetQuestionsUseCase @Inject constructor(
     private val repository: QuizRepository
 ) {
     operator fun invoke(category: String): Flow<List<Question>> {
-        if (category.isBlank()) {
-            throw IllegalArgumentException("Category cannot be empty")
-        }
         return repository.getQuestionsByCategory(category)
     }
 }

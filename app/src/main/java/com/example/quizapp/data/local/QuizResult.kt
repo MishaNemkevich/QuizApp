@@ -1,4 +1,4 @@
-package com.example.quizapp.domain.model
+package com.example.quizapp.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

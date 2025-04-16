@@ -2,21 +2,17 @@ package com.example.quizapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.composable
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.example.quizapp.presentation.screens.CategoriesScreen
-import com.example.quizapp.presentation.screens.QuestionView
-import com.example.quizapp.presentation.screens.QuizResultView
-import com.example.quizapp.presentation.viewmodel.QuizViewModel
+import com.example.quizapp.presentation.screens.QuizScreen
 
 @Composable
-fun QuizNavGraph(
-    navController: NavController,
-    viewModel: QuizViewModel
-) {
+fun QuizNavHost() {
+    val navController = rememberNavController()
+
     NavHost(
-        navController = navController as NavHostController,
+        navController = navController,
         startDestination = "categories"
     ) {
         composable("categories") {
@@ -24,19 +20,10 @@ fun QuizNavGraph(
         }
         composable("quiz/{category}") { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: ""
-            if (viewModel.isQuizFinished.value) {
-                QuizResultView(
-                    viewModel = viewModel,
-                    navController = navController,
-                    category = category
-                )
-            } else {
-                QuestionView(
-                    viewModel = viewModel,
-                    navController = navController,
-                    category = category
-                )
-            }
+            QuizScreen(
+                category = category,
+                navController = navController
+            )
         }
     }
 }

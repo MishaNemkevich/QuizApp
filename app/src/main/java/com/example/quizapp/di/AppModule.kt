@@ -19,12 +19,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetCategoriesUseCase(repository: QuizRepository): GetCategoriesUseCase {
-        return GetCategoriesUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
     fun provideQuizDatabase(@ApplicationContext context: Context): QuizDatabase {
         return Room.databaseBuilder(
             context,
@@ -41,6 +35,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideGetCategoriesUseCase(repository: QuizRepository): GetCategoriesUseCase {
+        return GetCategoriesUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
     fun provideGetQuestionsUseCase(repository: QuizRepository): GetQuestionsUseCase {
         return GetQuestionsUseCase(repository)
     }
@@ -49,12 +49,6 @@ object AppModule {
     @Singleton
     fun provideSaveResultUseCase(repository: QuizRepository): SaveResultUseCase {
         return SaveResultUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetAllResultsUseCase(repository: QuizRepository): GetResultUseCase {
-        return GetResultUseCase(repository)
     }
 
     @Provides

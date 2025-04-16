@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">QuizApp</string>
+    <string name="app_name">Programming Quiz</string>
+    <string name="categories">Категории</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="back_to_categories">К категориям</string>
+    <string name="error_occurred">Произошла ошибка</string>
+    <string name="no_categories">Категории не найдены</string>
 </resources>

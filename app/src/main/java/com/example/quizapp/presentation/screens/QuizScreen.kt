@@ -1,34 +1,30 @@
 package com.example.quizapp.presentation.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.quizapp.data.local.Question
+import com.example.quizapp.presentation.components.ErrorScreen
+import com.example.quizapp.presentation.components.FullScreenLoader
 import com.example.quizapp.presentation.viewmodel.QuizViewModel
 
 @Composable
 fun QuizScreen(
     category: String,
+    navController: NavController,
     viewModel: QuizViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -40,16 +36,18 @@ fun QuizScreen(
     when {
         uiState.isLoading -> FullScreenLoader()
         uiState.error != null -> ErrorScreen(
-            error = uiState.error,
-            onRetry = { viewModel.loadQuestions() } // Передаем обработчик
+            message = uiState.error,
+            onRetry = { viewModel.loadQuestions(category) }
         )
-        uiState.isQuizFinished -> QuizResultView(
+
+        uiState.isQuizFinished -> QuizResultScreen(
             score = uiState.score,
             totalQuestions = uiState.questions.size,
             onRestart = { viewModel.resetQuiz() },
-            onBackToCategories = { /* Навигация назад */ }
+            onBackToCategories = { navController.popBackStack() }
         )
-        else -> QuestionView (
+
+        else -> QuestionScreen(
             question = uiState.questions[uiState.currentQuestionIndex],
             questionNumber = uiState.currentQuestionIndex + 1,
             totalQuestions = uiState.questions.size,
@@ -62,49 +60,57 @@ fun QuizScreen(
 }
 
 @Composable
-fun FullScreenLoader() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-fun ErrorScreen(
-    error: String?,
-    onRetry: () -> Unit
+private fun QuestionScreen(
+    question: Question,
+    questionNumber: Int,
+    totalQuestions: Int,
+    score: Int,
+    onAnswerSelected: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Icon(
-            imageVector = Icons.Default.Error,
-            contentDescription = "Ошибка",
-            tint = MaterialTheme.colorScheme.error,
-            modifier = Modifier.size(48.dp)
+        QuestionHeader(
+            questionNumber = questionNumber,
+            totalQuestions = totalQuestions,
+            score = score
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = error ?: "Произошла ошибка",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
+            text = question.text,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(onClick = onRetry) {
-            Text("Попробовать снова")
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            question.options.forEachIndexed { index, option ->
+                Button(
+                    onClick = { onAnswerSelected(index) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = option)
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun QuestionHeader(
+    questionNumber: Int,
+    totalQuestions: Int,
+    score: Int
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = "Вопрос $questionNumber/$totalQuestions")
+        Text(text = "Счет: $score")
     }
 }

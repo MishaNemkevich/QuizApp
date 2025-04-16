@@ -53,6 +53,7 @@ dependencies {
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
     kapt (libs.hilt.compiler)
+    ksp(libs.room.compiler.v250)
     implementation (libs.hilt.android)
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.core.ktx)
@@ -72,6 +73,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-kapt {
+kapt{
     correctErrorTypes = true
 }

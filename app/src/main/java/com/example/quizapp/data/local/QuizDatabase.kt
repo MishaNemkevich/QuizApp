@@ -2,18 +2,16 @@ package com.example.quizapp.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.quizapp.data.local.Question
+import androidx.room.TypeConverters
+import com.example.quizapp.data.Converters
+import com.example.quizapp.data.LocalDateTimeConverter
 
-@Database(entities = [Question::class],
+@Database(
+    entities = [Question::class, QuizResult::class],
     version = 1,
-    exportSchema = false )
-abstract class QuizDatabase: RoomDatabase() {
-
-    abstract fun quizDao():  QuizDao
-
-    companion object {
-        const val DATABASE_NAME = "quiz_db"
-    }
-
-
+    exportSchema = false
+)
+@TypeConverters(Converters::class, LocalDateTimeConverter::class)
+abstract class QuizDatabase : RoomDatabase() {
+    abstract fun quizDao(): QuizDao
 }

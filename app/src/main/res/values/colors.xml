@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ic_python">#FFD43B</color>  <!-- Python желтый -->
+    <color name="ic_java">#5382A1</color>    <!-- Java синий -->
+    <color name="ic_kotlin">#7F52FF</color>  <!-- Kotlin фиолетовый -->
+    <color name="ic_code">#000000</color>    <!-- Общий черный -->
 </resources>

@@ -12,10 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quizapp.domain.model.Category
+import com.example.quizapp.presentation.components.EmptyCategoriesScreen
+import com.example.quizapp.presentation.components.ErrorScreen
+import com.example.quizapp.presentation.components.FullScreenLoader
+import com.example.quizapp.presentation.viewmodel.CategoriesState
 import com.example.quizapp.presentation.viewmodel.CategoriesViewModel
 
 @Composable
@@ -23,68 +28,64 @@ fun CategoriesScreen(
     navController: NavController,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
-    val categories = viewModel.categories.collectAsState()
-    val isLoading = viewModel.isLoading.collectAsState().value
+    val state = viewModel.state.collectAsState().value
 
-    if (isLoading) {
-        FullScreenLoader()
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Выберите категорию",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                items(categories) { category ->
-                    CategoryCard(
-                        category = category,
-                        onClick = { navController.navigate("quiz/${category.name}") }
-                    )
-                }
+    when (val currentState = state) {
+        is CategoriesState.Loading -> FullScreenLoader()
+        is CategoriesState.Empty -> EmptyCategoriesScreen()
+        is CategoriesState.Error -> ErrorScreen(
+            message = currentState.message,
+            onRetry = { viewModel.loadCategories() }
+        )
+        is CategoriesState.Success -> CategoryGrid(
+            categories = currentState.categories,
+            onCategoryClick = { category ->
+                navController.navigate("quiz/${category.name}")
             }
-        }
+        )
     }
 }
 
 @Composable
-fun CategoryCard(
+private fun CategoryGrid(
+    categories: List<Category>,
+    onCategoryClick: (Category) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+//        items(categories) { category ->
+//            CategoryCard(
+//                category = category,
+//                onClick = { onCategoryClick(category) }
+//            )
+//        }
+    }
+}
+
+@Composable
+private fun CategoryCard(
     category: Category,
     onClick: () -> Unit
 ) {
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = category.icon,
-                contentDescription = null,
+                painter = painterResource(id = category.iconResId),
+                contentDescription = category.name,
                 modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = category.name,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Text(text = category.name)
         }
     }
 }
