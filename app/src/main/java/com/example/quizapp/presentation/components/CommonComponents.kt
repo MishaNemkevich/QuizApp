@@ -65,3 +65,23 @@ fun EmptyCategoriesScreen() {
         Text("Категории не найдены")
     }
 }
+
+@Composable
+fun EmptyQuizScreen(
+    onBack: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "No questions available for this category",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = onBack) {
+            Text("Back to categories")
+        }
+    }
+}

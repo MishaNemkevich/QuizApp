@@ -16,30 +16,70 @@ class QuizViewModel @Inject constructor(
     private val saveResultUseCase: SaveResultUseCase
 ) : ViewModel() {
 
+    private val _difficulty = MutableStateFlow("All")
+    val difficulty: StateFlow<String> = _difficulty.asStateFlow()
+
     private val _uiState = MutableStateFlow(QuizUiState())
     val uiState: StateFlow<QuizUiState> = _uiState
 
+    fun setDifficulty(newDifficulty: String) {
+        _difficulty.value = newDifficulty
+    }
+
     fun loadQuestions(category: String) {
-        _uiState.update { it.copy(isLoading = true) }
+        _uiState.update { it.copy(
+            isLoading = true,
+            error = null,
+            questions = emptyList(),
+            currentQuestionIndex = 0,
+            score = 0,
+            isQuizFinished = false
+        ) }
+
         viewModelScope.launch {
-            getQuestionsUseCase(category)
-                .collect { questions ->
-                    _uiState.update {
-                        it.copy(
-                            questions = questions,
-                            currentQuestionIndex = 0,
-                            score = 0,
-                            isLoading = false,
-                            isQuizFinished = false
-                        )
+            try {
+                getQuestionsUseCase(category)
+                    .catch { e ->
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = e.message ?: "Unknown error occurred"
+                            )
+                        }
                     }
+                    .collect { questions ->
+                        val filteredQuestions = if (_difficulty.value != "All") {
+                            questions.filter { it.difficulty == _difficulty.value }
+                        } else {
+                            questions
+                        }.shuffled()
+
+                        _uiState.update {
+                            it.copy(
+                                questions = filteredQuestions,
+                                currentQuestionIndex = 0,
+                                score = 0,
+                                isLoading = false,
+                                isQuizFinished = filteredQuestions.isEmpty()
+                            )
+                        }
+                    }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load questions: ${e.localizedMessage}"
+                    )
                 }
+            }
         }
     }
 
     fun checkAnswer(selectedAnswer: Int) {
         _uiState.update { state ->
-            val currentQuestion = state.questions.getOrNull(state.currentQuestionIndex) ?: return
+            if (state.isQuizFinished) return@update state
+
+            val currentQuestion = state.questions.getOrNull(state.currentQuestionIndex) ?: return@update state
             val isCorrect = selectedAnswer == currentQuestion.correctAnswer
             val newScore = if (isCorrect) state.score + 1 else state.score
             val nextIndex = state.currentQuestionIndex + 1
@@ -57,7 +97,7 @@ class QuizViewModel @Inject constructor(
 
             state.copy(
                 score = newScore,
-                currentQuestionIndex = nextIndex,
+                currentQuestionIndex = if (!isFinished) nextIndex else state.currentQuestionIndex,
                 isQuizFinished = isFinished,
                 lastAnswerCorrect = isCorrect
             )

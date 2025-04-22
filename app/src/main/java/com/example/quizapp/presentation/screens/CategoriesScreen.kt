@@ -3,6 +3,7 @@ package com.example.quizapp.presentation.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -57,12 +58,12 @@ private fun CategoryGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-//        items(categories) { category ->
-//            CategoryCard(
-//                category = category,
-//                onClick = { onCategoryClick(category) }
-//            )
-//        }
+        items(categories) { category ->
+            CategoryCard(
+                category = category,
+                onClick = { onCategoryClick(category) }
+            )
+        }
     }
 }
 

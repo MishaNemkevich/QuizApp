@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quizapp.data.local.Question
+import com.example.quizapp.presentation.components.EmptyQuizScreen
 import com.example.quizapp.presentation.components.ErrorScreen
 import com.example.quizapp.presentation.components.FullScreenLoader
 import com.example.quizapp.presentation.viewmodel.QuizViewModel
@@ -40,6 +41,10 @@ fun QuizScreen(
             onRetry = { viewModel.loadQuestions(category) }
         )
 
+        uiState.questions.isEmpty() -> EmptyQuizScreen(
+            onBack = { navController.popBackStack() }
+        )
+
         uiState.isQuizFinished -> QuizResultScreen(
             score = uiState.score,
             totalQuestions = uiState.questions.size,
@@ -47,15 +52,25 @@ fun QuizScreen(
             onBackToCategories = { navController.popBackStack() }
         )
 
-        else -> QuestionScreen(
-            question = uiState.questions[uiState.currentQuestionIndex],
-            questionNumber = uiState.currentQuestionIndex + 1,
-            totalQuestions = uiState.questions.size,
-            score = uiState.score,
-            onAnswerSelected = { answerIndex ->
-                viewModel.checkAnswer(answerIndex)
+        else -> {
+            val currentQuestion = uiState.questions.getOrNull(uiState.currentQuestionIndex)
+            if (currentQuestion != null) {
+                QuestionScreen(
+                    question = currentQuestion,
+                    questionNumber = uiState.currentQuestionIndex + 1,
+                    totalQuestions = uiState.questions.size,
+                    score = uiState.score,
+                    onAnswerSelected = { answerIndex ->
+                        viewModel.checkAnswer(answerIndex)
+                    }
+                )
+            } else {
+                ErrorScreen(
+                    message = "Question not available",
+                    onRetry = { viewModel.resetQuiz() }
+                )
             }
-        )
+        }
     }
 }
 
