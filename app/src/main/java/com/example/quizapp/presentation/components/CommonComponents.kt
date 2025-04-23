@@ -7,11 +7,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.quizapp.R
 
 @Composable
-fun FullScreenLoader() {
+fun FullScreenLoader(
+    text: String = stringResource(R.string.loading)
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -69,6 +73,7 @@ fun EmptyCategoriesScreen() {
 
 @Composable
 fun EmptyQuizScreen(
+    message: String,
     onBack: () -> Unit
 ) {
     Column(
@@ -77,7 +82,7 @@ fun EmptyQuizScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "No questions available for this category",
+            message,
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(16.dp))

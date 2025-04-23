@@ -33,6 +33,9 @@ import com.example.quizapp.presentation.components.ErrorScreen
 import com.example.quizapp.presentation.components.FullScreenLoader
 import com.example.quizapp.presentation.viewmodel.QuizViewModel
 import androidx.compose.runtime.*
+import com.example.quizapp.R
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun QuizScreen(
@@ -41,6 +44,7 @@ fun QuizScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(uiState.isQuizFinished) {
         if (uiState.isQuizFinished && uiState.questions.isNotEmpty()) {
@@ -49,13 +53,18 @@ fun QuizScreen(
     }
 
     when {
-        uiState.isLoading -> FullScreenLoader()
+        uiState.isLoading -> FullScreenLoader(
+            text = stringResource(R.string.loading)
+        )
         uiState.error != null -> ErrorScreen(
-            message = uiState.error,
+            message = uiState.error ?: stringResource(R.string.error_occurred),
             onRetry = { viewModel.resetQuiz() },
             onBack = onBack
         )
-        uiState.questions.isEmpty() -> EmptyQuizScreen(onBack = onBack)
+        uiState.questions.isEmpty() -> EmptyQuizScreen(
+            message = stringResource(R.string.no_questions),
+            onBack = onBack
+        )
         else -> {
             val currentQuestion = uiState.questions[uiState.currentQuestionIndex]
             QuestionScreen(
@@ -103,30 +112,15 @@ private fun QuestionScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
-            ) {
-                question.options.forEachIndexed { index, option ->
-                    AnswerButton(
-                        text = option,
-                        onClick = { onAnswerSelected(index) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp)
-                    )
-                }
-            }
-        }
+        AnswersGrid(
+            options = question.options,
+            onAnswerSelected = onAnswerSelected,
+            modifier = Modifier.weight(1f)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
-
 @Composable
 private fun AnswerButton(
     text: String,

@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,11 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            val settingsViewModel: SettingsViewModel = hiltViewModel()
-            val isDarkTheme = settingsViewModel.isDarkTheme.collectAsState().value
 
-            QuizAppTheme(darkTheme = isDarkTheme) {
+        // Устанавливаем язык перед созданием контента
+        LocalizationManager.setLocale(this)
+
+        setContent {
+            // Переносим ViewModel внутрь composable-функции
+            QuizThemeWrapper {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -32,5 +35,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun QuizThemeWrapper(content: @Composable () -> Unit) {
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+    val isDarkTheme = settingsViewModel.isDarkTheme.collectAsState().value
+
+    QuizAppTheme(darkTheme = isDarkTheme) {
+        content()
     }
 }

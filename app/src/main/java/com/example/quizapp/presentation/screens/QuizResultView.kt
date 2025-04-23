@@ -5,8 +5,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.quizapp.R
 
 @Composable
 fun QuizResultScreen(
@@ -17,9 +19,9 @@ fun QuizResultScreen(
 ) {
     val percentage = (score.toFloat() / totalQuestions * 100).toInt()
     val resultMessage = when {
-        percentage >= 80 -> "Отличный результат! 🎉"
-        percentage >= 60 -> "Хорошо! 👍"
-        else -> "Попробуйте ещё раз! 💪"
+        percentage >= 80 -> stringResource(R.string.result_excellent)
+        percentage >= 60 -> stringResource(R.string.result_good)
+        else -> stringResource(R.string.result_try_again)
     }
 
     Column(
@@ -55,7 +57,7 @@ fun QuizResultScreen(
             onClick = onRestart,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Попробовать снова")
+            Text(stringResource(R.string.restart))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -64,7 +66,7 @@ fun QuizResultScreen(
             onClick = onBackToCategories,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("К категориям")
+            Text(stringResource(R.string.back_to_categories))
         }
     }
 }
