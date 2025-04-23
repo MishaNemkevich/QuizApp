@@ -8,7 +8,7 @@ import com.example.quizapp.data.LocalDateTimeConverter
 
 @Database(
     entities = [Question::class, QuizResult::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class, LocalDateTimeConverter::class)

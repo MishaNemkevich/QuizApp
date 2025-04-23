@@ -4,19 +4,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.quizapp.domain.model.Category
 import com.example.quizapp.presentation.components.EmptyCategoriesScreen
 import com.example.quizapp.presentation.components.ErrorScreen
@@ -26,27 +29,47 @@ import com.example.quizapp.presentation.viewmodel.CategoriesViewModel
 
 @Composable
 fun CategoriesScreen(
-    navController: NavController,
+    onCategorySelected: (String) -> Unit,
+    onSettingsClick: () -> Unit, // Добавляем callback для настроек
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
 
-    when (val currentState = state) {
-        is CategoriesState.Loading -> FullScreenLoader()
-        is CategoriesState.Empty -> EmptyCategoriesScreen()
-        is CategoriesState.Error -> ErrorScreen(
-            message = currentState.message,
-            onRetry = { viewModel.loadCategories() }
-        )
-        is CategoriesState.Success -> CategoryGrid(
-            categories = currentState.categories,
-            onCategoryClick = { category ->
-                navController.navigate("quiz/${category.name}")
+    LaunchedEffect(Unit) {
+        viewModel.loadCategories()
+    }
+
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onSettingsClick,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Настройки темы"
+                )
             }
-        )
+        }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            when (val currentState = state) {
+                is CategoriesState.Loading -> FullScreenLoader()
+                is CategoriesState.Empty -> EmptyCategoriesScreen()
+                is CategoriesState.Error -> ErrorScreen(
+                    message = currentState.message,
+                    onRetry = { viewModel.loadCategories() },
+                    onBack = { /* Обработка назад */ }
+                )
+                is CategoriesState.Success -> CategoryGrid(
+                    categories = currentState.categories,
+                    onCategoryClick = { category -> onCategorySelected(category.name) }
+                )
+            }
+        }
     }
 }
-
 @Composable
 private fun CategoryGrid(
     categories: List<Category>,

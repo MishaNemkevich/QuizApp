@@ -2,6 +2,8 @@ package com.example.quizapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.quizapp.AppPreferences
+import com.example.quizapp.AppPreferencesImpl
 import com.example.quizapp.data.local.QuizDatabase
 import com.example.quizapp.data.repository.QuizRepositoryImpl
 import com.example.quizapp.domain.QuizRepository
@@ -38,6 +40,10 @@ object AppModule {
     fun provideGetCategoriesUseCase(repository: QuizRepository): GetCategoriesUseCase {
         return GetCategoriesUseCase(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideAppPreferences(impl: AppPreferencesImpl): AppPreferences = impl
 
     @Provides
     @Singleton

@@ -23,7 +23,8 @@ fun FullScreenLoader() {
 @Composable
 fun ErrorScreen(
     message: String?,
-    onRetry: () -> Unit
+    onRetry: () -> Unit,
+    onBack: () -> Unit
 ) {
     Column(
         modifier = Modifier

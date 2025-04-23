@@ -7,9 +7,10 @@ import java.time.LocalDateTime
 @Entity(tableName = "quiz_results")
 data class QuizResult(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val category: String,
     val score: Int,
     val totalQuestions: Int,
-    val date: LocalDateTime = LocalDateTime.now()
+    val difficulty: String,
+    val date: Long
 )

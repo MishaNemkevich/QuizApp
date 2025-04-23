@@ -43,24 +43,22 @@ class QuizViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                error = e.message ?: "Unknown error occurred"
+                                error = e.message ?: "Failed to load questions"
                             )
                         }
                     }
                     .collect { questions ->
-                        val filteredQuestions = if (_difficulty.value != "All") {
-                            questions.filter { it.difficulty == _difficulty.value }
-                        } else {
-                            questions
+                        val filteredQuestions = when (_difficulty.value) {
+                            "All" -> questions
+                            else -> questions.filter { it.difficulty == _difficulty.value }
                         }.shuffled()
 
                         _uiState.update {
                             it.copy(
                                 questions = filteredQuestions,
-                                currentQuestionIndex = 0,
-                                score = 0,
                                 isLoading = false,
-                                isQuizFinished = filteredQuestions.isEmpty()
+                                isQuizFinished = filteredQuestions.isEmpty(),
+                                error = if (filteredQuestions.isEmpty()) "No questions available" else null
                             )
                         }
                     }
@@ -68,7 +66,7 @@ class QuizViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = "Failed to load questions: ${e.localizedMessage}"
+                        error = "Unexpected error: ${e.localizedMessage}"
                     )
                 }
             }
@@ -86,13 +84,17 @@ class QuizViewModel @Inject constructor(
             val isFinished = nextIndex >= state.questions.size
 
             if (isFinished) {
-                saveResult(
-                    QuizResult(
-                        category = currentQuestion.category,
-                        score = newScore,
-                        totalQuestions = state.questions.size
+                viewModelScope.launch {
+                    saveResult(
+                        QuizResult(
+                            category = currentQuestion.category,
+                            score = newScore,
+                            totalQuestions = state.questions.size,
+                            difficulty = _difficulty.value,
+                            date = System.currentTimeMillis()
+                        )
                     )
-                )
+                }
             }
 
             state.copy(
@@ -104,21 +106,12 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    private fun saveResult(result: QuizResult) {
-        viewModelScope.launch {
-            saveResultUseCase(result)
-        }
+    private suspend fun saveResult(result: QuizResult) {
+        saveResultUseCase(result)
     }
 
     fun resetQuiz() {
-        _uiState.update {
-            it.copy(
-                currentQuestionIndex = 0,
-                score = 0,
-                isQuizFinished = false,
-                lastAnswerCorrect = null
-            )
-        }
+        _uiState.update { QuizUiState() }
     }
 }
 

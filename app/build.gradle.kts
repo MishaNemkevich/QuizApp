@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation (libs.androidx.datastore.preferences)
     implementation (libs.androidx.material)
     implementation (libs.androidx.material.icons.core)
     implementation (libs.material.icons.extended)

@@ -2,13 +2,12 @@ package com.example.quizapp.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizapp.domain.model.Category
 import com.example.quizapp.domain.usecase.GetCategoriesUseCase
 import com.example.quizapp.domain.usecase.SeedDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,17 +24,25 @@ class CategoriesViewModel @Inject constructor(
         loadCategories()
     }
 
-    internal fun loadCategories() {
+    fun loadCategories() {
+        _state.value = CategoriesState.Loading
         viewModelScope.launch {
-            seedDatabaseUseCase()
-            getCategoriesUseCase()
-                .collectLatest { categories ->
-                    _state.value = if (categories.isEmpty()) {
-                        CategoriesState.Empty
-                    } else {
-                        CategoriesState.Success(categories)
+            try {
+                seedDatabaseUseCase()
+                getCategoriesUseCase()
+                    .catch { e ->
+                        _state.value = CategoriesState.Error(e.message ?: "Failed to load categories")
                     }
-                }
+                    .collect { categories ->
+                        _state.value = if (categories.isEmpty()) {
+                            CategoriesState.Empty
+                        } else {
+                            CategoriesState.Success(categories)
+                        }
+                    }
+            } catch (e: Exception) {
+                _state.value = CategoriesState.Error("Unexpected error: ${e.localizedMessage}")
+            }
         }
     }
 }
