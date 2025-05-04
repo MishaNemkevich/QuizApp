@@ -2,6 +2,7 @@ package com.example.quizapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,7 +10,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.quizapp.presentation.screens.CategoriesScreen
-import com.example.quizapp.presentation.screens.DifficultySelectionScreen
 import com.example.quizapp.presentation.screens.QuizResultScreen
 import com.example.quizapp.presentation.screens.QuizScreen
 import com.example.quizapp.presentation.screens.SettingsScreen
@@ -30,9 +30,13 @@ fun QuizNavHost() {
                 },
                 onSettingsClick = {
                     navController.navigate(Routes.SETTINGS)
+                },
+                onStartQuiz = { category, difficulty ->
+                    navController.navigate(Routes.buildQuizRoute(category, difficulty))
                 }
             )
         }
+
         composable(Routes.SETTINGS) {
             SettingsScreen(
                 onBack = { navController.popBackStack() }
@@ -40,29 +44,21 @@ fun QuizNavHost() {
         }
 
         composable(
-            route = Routes.DIFFICULTY,
-            arguments = listOf(navArgument("category") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val category = backStackEntry.arguments?.getString("category") ?: ""
-            DifficultySelectionScreen(
-                onDifficultySelected = { difficulty ->
-                    navController.navigate(Routes.buildQuizRoute(category)) {
-                        popUpTo(Routes.DIFFICULTY) { inclusive = true }
-                    }
-                },
-                onBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(
             route = Routes.QUIZ,
-            arguments = listOf(navArgument("category") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("difficulty") {
+                    type = NavType.StringType
+                    defaultValue = "All"
+                }
+            )
         ) { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: ""
+            val difficulty = backStackEntry.arguments?.getString("difficulty") ?: "All"
             val viewModel: QuizViewModel = hiltViewModel()
 
-            LaunchedEffect(category) {
-                viewModel.loadQuestions(category)
+            LaunchedEffect(category, difficulty) {
+                viewModel.loadQuestions(category, difficulty)
             }
 
             QuizScreen(
@@ -85,13 +81,16 @@ fun QuizNavHost() {
         ) { backStackEntry ->
             val score = backStackEntry.arguments?.getInt("score") ?: 0
             val total = backStackEntry.arguments?.getInt("total") ?: 1
+            val category = remember {
+                navController.previousBackStackEntry?.arguments?.getString("category")
+            }
 
             QuizResultScreen(
                 score = score,
                 totalQuestions = total,
                 onRestart = {
-                    navController.previousBackStackEntry?.arguments?.getString("category")?.let { category ->
-                        navController.navigate(Routes.buildQuizRoute(category)) {
+                    category?.let {
+                        navController.navigate(Routes.buildQuizRoute(it)) {
                             popUpTo(Routes.RESULTS) { inclusive = true }
                         }
                     }

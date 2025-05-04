@@ -15,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,11 +31,24 @@ import com.example.quizapp.presentation.viewmodel.CategoriesViewModel
 
 @Composable
 fun CategoriesScreen(
+    onStartQuiz: (category: String, difficulty: String) -> Unit,
     onCategorySelected: (String) -> Unit,
-    onSettingsClick: () -> Unit, // Добавляем callback для настроек
+    onSettingsClick: () -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
+    var showDifficultyDialog = remember { mutableStateOf(false) }
+    var selectedCategory = remember { mutableStateOf("") }
+
+    if (showDifficultyDialog.value) {
+        DifficultyDialog(
+            onDifficultySelected = { difficulty ->
+                onStartQuiz(selectedCategory.value, difficulty)
+                showDifficultyDialog.value = false  // Закрываем здесь
+            },
+            onDismiss = { showDifficultyDialog.value = false }
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.loadCategories()
@@ -64,7 +79,12 @@ fun CategoriesScreen(
                 )
                 is CategoriesState.Success -> CategoryGrid(
                     categories = currentState.categories,
-                    onCategoryClick = { category -> onCategorySelected(category.name) }
+                    onCategoryClick = { category ->
+                        selectedCategory.value = category.name
+                        showDifficultyDialog.value = true
+                        // Для обратной совместимости:
+                        onCategorySelected(category.name)
+                    }
                 )
             }
         }

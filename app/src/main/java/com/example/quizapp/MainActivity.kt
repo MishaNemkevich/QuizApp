@@ -21,11 +21,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Устанавливаем язык перед созданием контента
         LocalizationManager.setLocale(this)
 
         setContent {
-            // Переносим ViewModel внутрь composable-функции
             QuizThemeWrapper {
                 Surface(
                     modifier = Modifier.fillMaxSize(),

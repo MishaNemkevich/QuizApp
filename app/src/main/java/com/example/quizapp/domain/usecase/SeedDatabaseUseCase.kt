@@ -94,7 +94,6 @@ class SeedDatabaseUseCase @Inject constructor(
                     category = "Kotlin",
                     difficulty = "Easy"
                 ),
-                // Добавьте 10-15 вопросов для Kotlin...
 
                 // Java вопросы (15+)
                 Question(
@@ -116,7 +115,6 @@ class SeedDatabaseUseCase @Inject constructor(
                     category = "Java",
                     difficulty = "Medium"
                 )
-                // Добавьте 10-15 вопросов для Java...
             )
             repository.insertQuestions(allQuestions)
         }

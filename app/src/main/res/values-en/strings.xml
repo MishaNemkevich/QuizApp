@@ -30,4 +30,12 @@
     <string name="error_occurred">Error</string>
     <string name="no_questions">No question</string>
     <string name="language_settings">Language setting</string>
+
+    <string name="select_difficulty">Select difficulty</string>
+    <string name="all">All questions</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

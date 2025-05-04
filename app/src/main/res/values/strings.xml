@@ -28,4 +28,11 @@
     <string name="error_occurred">Ошибка</string>
     <string name="no_questions">Нет вопросов</string>
     <string name="language_settings">Языковые настройки</string>
+
+    <string name="select_difficulty">Выберите сложность</string>
+    <string name="all">Все вопросы</string>
+    <string name="easy">Легкая</string>
+    <string name="medium">Средняя</string>
+    <string name="hard">Сложная</string>
+    <string name="cancel">Отмена</string>
 </resources>

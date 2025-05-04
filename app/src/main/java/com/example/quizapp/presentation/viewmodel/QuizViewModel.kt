@@ -22,19 +22,18 @@ class QuizViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(QuizUiState())
     val uiState: StateFlow<QuizUiState> = _uiState
 
-    fun setDifficulty(newDifficulty: String) {
-        _difficulty.value = newDifficulty
-    }
-
-    fun loadQuestions(category: String) {
-        _uiState.update { it.copy(
-            isLoading = true,
-            error = null,
-            questions = emptyList(),
-            currentQuestionIndex = 0,
-            score = 0,
-            isQuizFinished = false
-        ) }
+    fun loadQuestions(category: String, difficulty: String = "All") {
+        viewModelScope.launch {
+            getQuestionsUseCase(category)
+                .map { questions ->
+                    if (difficulty != "All") {
+                        questions.filter { it.difficulty == difficulty }
+                    } else {
+                        questions
+                    }
+                }
+                .collect { /* обновляем состояние */ }
+        }
 
         viewModelScope.launch {
             try {
