@@ -3,7 +3,6 @@ package com.example.quizapp.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapp.domain.usecase.GetCategoriesUseCase
-import com.example.quizapp.domain.usecase.SeedDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,8 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val seedDatabaseUseCase: SeedDatabaseUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<CategoriesState>(CategoriesState.Loading)
@@ -27,22 +25,19 @@ class CategoriesViewModel @Inject constructor(
     fun loadCategories() {
         _state.value = CategoriesState.Loading
         viewModelScope.launch {
-            try {
-                seedDatabaseUseCase()
-                getCategoriesUseCase()
-                    .catch { e ->
-                        _state.value = CategoriesState.Error(e.message ?: "Failed to load categories")
+            getCategoriesUseCase()
+                .catch { e ->
+                    _state.value = CategoriesState.Error(
+                        e.message ?: "Failed to load categories"
+                    )
+                }
+                .collect { categories ->
+                    _state.value = if (categories.isEmpty()) {
+                        CategoriesState.Empty
+                    } else {
+                        CategoriesState.Success(categories)
                     }
-                    .collect { categories ->
-                        _state.value = if (categories.isEmpty()) {
-                            CategoriesState.Empty
-                        } else {
-                            CategoriesState.Success(categories)
-                        }
-                    }
-            } catch (e: Exception) {
-                _state.value = CategoriesState.Error("Unexpected error: ${e.localizedMessage}")
-            }
+                }
         }
     }
 }

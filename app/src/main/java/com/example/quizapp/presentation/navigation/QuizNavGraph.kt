@@ -25,9 +25,6 @@ fun QuizNavHost() {
     ) {
         composable(Routes.CATEGORIES) {
             CategoriesScreen(
-                onCategorySelected = { category ->
-                    navController.navigate(Routes.buildQuizRoute(category))
-                },
                 onSettingsClick = {
                     navController.navigate(Routes.SETTINGS)
                 },
@@ -58,7 +55,7 @@ fun QuizNavHost() {
             val viewModel: QuizViewModel = hiltViewModel()
 
             LaunchedEffect(category, difficulty) {
-                viewModel.loadQuestions(category, difficulty)
+                viewModel.loadQuestions(category)
             }
 
             QuizScreen(

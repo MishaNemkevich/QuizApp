@@ -32,7 +32,6 @@ import com.example.quizapp.presentation.viewmodel.CategoriesViewModel
 @Composable
 fun CategoriesScreen(
     onStartQuiz: (category: String, difficulty: String) -> Unit,
-    onCategorySelected: (String) -> Unit,
     onSettingsClick: () -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
@@ -44,7 +43,7 @@ fun CategoriesScreen(
         DifficultyDialog(
             onDifficultySelected = { difficulty ->
                 onStartQuiz(selectedCategory.value, difficulty)
-                showDifficultyDialog.value = false  // Закрываем здесь
+                showDifficultyDialog.value = false
             },
             onDismiss = { showDifficultyDialog.value = false }
         )
@@ -82,14 +81,13 @@ fun CategoriesScreen(
                     onCategoryClick = { category ->
                         selectedCategory.value = category.name
                         showDifficultyDialog.value = true
-                        // Для обратной совместимости:
-                        onCategorySelected(category.name)
                     }
                 )
             }
         }
     }
 }
+
 @Composable
 private fun CategoryGrid(
     categories: List<Category>,

@@ -45,6 +45,8 @@ android {
 
 dependencies {
 
+    implementation (libs.gson)
+    implementation (libs.kotlinx.coroutines.android)
     implementation (libs.androidx.datastore.preferences)
     implementation (libs.androidx.material)
     implementation (libs.androidx.material.icons.core)

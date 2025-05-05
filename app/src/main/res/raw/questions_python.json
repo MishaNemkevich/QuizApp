@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "text": "Что выводит print(5 // 2) в Python?",
+      "options": [
+        "2",
+        "2.5",
+        "3",
+        "1"
+      ],
+      "correctAnswer": 0,
+      "category": "Python",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Какой тип данных изменяем в Python?",
+      "options": [
+        "Tuple",
+        "List",
+        "String",
+        "Int"
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Что делает метод .strip()?",
+      "options": [
+        "Удаляет пробелы с обеих сторон",
+        "Разделяет строку",
+        "Переводит в нижний регистр",
+        "Заменяет подстроку"
+      ],
+      "correctAnswer": 0,
+      "category": "Python",
+      "difficulty": "Medium"
+    }
+  ]
+}

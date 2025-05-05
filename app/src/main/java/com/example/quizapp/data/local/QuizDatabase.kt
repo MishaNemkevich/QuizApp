@@ -3,15 +3,14 @@ package com.example.quizapp.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.quizapp.data.Converters
 import com.example.quizapp.data.LocalDateTimeConverter
 
 @Database(
-    entities = [Question::class, QuizResult::class],
-    version = 2,
+    entities = [QuizResult::class], // Только результаты
+    version = 3, // Сбрасываем версию
     exportSchema = false
 )
-@TypeConverters(Converters::class, LocalDateTimeConverter::class)
+@TypeConverters(LocalDateTimeConverter::class) // Только конвертер даты
 abstract class QuizDatabase : RoomDatabase() {
-    abstract fun quizDao(): QuizDao
+    abstract fun resultsDao(): ResultsDao // Переименованный DAO
 }

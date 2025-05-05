@@ -8,22 +8,25 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetCategoriesUseCase @Inject constructor(
-    private val repository: QuizRepository
+    private val repository: QuizRepository,
+    private val categoryIconMapper: CategoryIconMapper
 ) {
     operator fun invoke(): Flow<List<Category>> {
-        return repository.getCategories().map { categories ->
-            categories.map { name ->
-                Category(
-                    id = name.hashCode(),
-                    name = name,
-                    iconResId = getIconForCategory(name)
-                )
+        return repository.getCategories()
+            .map { categoryNames ->
+                categoryNames.map { name ->
+                    Category(
+                        name = name,
+                        iconResId = categoryIconMapper.getIconResId(name)
+                    )
+                }
             }
-        }
     }
+}
 
-    private fun getIconForCategory(category: String): Int {
-        return when (category) {
+class CategoryIconMapper @Inject constructor() {
+    fun getIconResId(categoryName: String): Int {
+        return when (categoryName) {
             "Python" -> R.drawable.ic_python
             "Java" -> R.drawable.ic_java
             "Kotlin" -> R.drawable.ic_kotlin
