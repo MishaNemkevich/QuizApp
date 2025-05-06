@@ -1,0 +1,133 @@
+{
+  "questions": [
+    {
+      "text": "Как объявить неизменяемую переменную в Kotlin?",
+      "options": ["var", "val", "const", "let"],
+      "correctAnswer": 1,
+      "category": "Kotlin",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Что выведет код: println(\"Kotlin\" === \"Kotlin\")?",
+      "options": ["true", "false", "null", "Ошибку компиляции"],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Какой тип данных в Kotlin обозначает целое число?",
+      "options": ["Int", "Float", "Double", "Number"],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Что такое Null Safety в Kotlin?",
+      "options": [
+        "Гарантия отсутствия NullPointerException",
+        "Автоматическое преобразование null в 0",
+        "Специальный тип nullable-переменных",
+        "Механизм оптимизации памяти"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Для чего используется ключевое слово 'lateinit'?",
+      "options": [
+        "Отложенная инициализация переменной",
+        "Объявление константы",
+        "Ленивая загрузка класса",
+        "Асинхронная инициализация"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Что такое data-класс в Kotlin?",
+      "options": [
+        "Класс только для хранения данных",
+        "Абстрактный класс",
+        "Класс для работы с БД",
+        "Синглтон-класс"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Как работает оператор Elvis (?:) в Kotlin?",
+      "options": [
+        "Возвращает значение слева, если оно не null, иначе справа",
+        "Проверяет равенство двух значений",
+        "Выполняет безопасное приведение типов",
+        "Генерирует исключение при null"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Что такое sealed-класс в Kotlin?",
+      "options": [
+        "Класс с ограниченным набором наследников",
+        "Приватный класс",
+        "Класс только для внутреннего использования",
+        "Аналог final класса в Java"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Как работает модификатор 'inline' для функций?",
+      "options": [
+        "Подставляет тело функции вместо вызова",
+        "Оптимизирует рекурсивные вызовы",
+        "Разрешает использовать нелокальные return",
+        "Варианты 1 и 3 верны"
+      ],
+      "correctAnswer": 3,
+      "category": "Kotlin",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Что такое reified-типы в Kotlin?",
+      "options": [
+        "Типы, которые сохраняются после стирания",
+        "Типы с гарантированной инициализацией",
+        "Типы только для runtime",
+        "Альтернатива дженерикам"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Как работает делегирование в Kotlin?",
+      "options": [
+        "Через ключевое слово 'by'",
+        "Через наследование",
+        "Через анонимные классы",
+        "Через extension-функции"
+      ],
+      "correctAnswer": 0,
+      "category": "Kotlin",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Что такое coroutine в Kotlin?",
+      "options": [
+        "Легковесный поток",
+        "Асинхронная задача",
+        "Механизм параллельных вычислений",
+        "Все варианты верны"
+      ],
+      "correctAnswer": 3,
+      "category": "Kotlin",
+      "difficulty": "Hard"
+    }
+  ]
+}

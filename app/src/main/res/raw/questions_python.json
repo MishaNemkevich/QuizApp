@@ -36,6 +36,186 @@
       "correctAnswer": 0,
       "category": "Python",
       "difficulty": "Medium"
+    },
+    {
+      "text": "Какой оператор используется для возведения в степень в Python?",
+      "options": [
+        "^",
+        "**",
+        "*",
+        "//"
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Что выведет `print(type(5.0))`?",
+      "options": [
+        "<class 'int'>",
+        "<class 'float'>",
+        "<class 'decimal'>",
+        "<class 'number'>"
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Как создать пустой словарь?",
+      "options": [
+        "{}",
+        "dict()",
+        "[]",
+        "Оба первых варианта верны"
+      ],
+      "correctAnswer": 3,
+      "category": "Python",
+      "difficulty": "Easy"
+    },
+    {
+      "text": "Что делает метод .get() у словаря?",
+      "options": [
+        "Удаляет элемент по ключу",
+        "Возвращает значение по ключу или None",
+        "Добавляет новый элемент",
+        "Проверяет наличие ключа"
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Как работает оператор `is`?",
+      "options": [
+        "Сравнивает значения",
+        "Проверяет идентичность объектов",
+        "Проверяет тип объектов",
+        "Аналогичен =="
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Что такое list comprehension?",
+      "options": [
+        "Способ создания списков",
+        "Метод сортировки списка",
+        "Функция для работы со списками",
+        "Специальный тип данных"
+      ],
+      "correctAnswer": 0,
+      "category": "Python",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Как правильно обработать исключение?",
+      "options": [
+        "try: код except Error: обработка",
+        "catch: код handle: обработка",
+        "try: код catch: обработка",
+        "exception: код finally: обработка"
+      ],
+      "correctAnswer": 0,
+      "category": "Python",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Что делает `__init__` в классе?",
+      "options": [
+        "Деструктор объекта",
+        "Конструктор класса",
+        "Инициализатор экземпляра",
+        "Статический метод"
+      ],
+      "correctAnswer": 2,
+      "category": "Python",
+      "difficulty": "Medium"
+    },
+    {
+      "text": "Как работает декоратор @property?",
+      "options": [
+        "Превращает метод в свойство",
+        "Добавляет новые свойства классу",
+        "Создает статическое свойство",
+        "Запрещает изменение атрибута"
+      ],
+      "correctAnswer": 0,
+      "category": "Python",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Что такое GIL в Python?",
+      "options": [
+        "Глобальный интерпретатор списков",
+        "Генератор имён локальных переменных",
+        "Глобальная блокировка интерпретатора",
+        "Графический интерфейс языка"
+      ],
+      "correctAnswer": 2,
+      "category": "Python",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Как работают метаклассы?",
+      "options": [
+        "Это классы для создания классов",
+        "Это особый вид декораторов",
+        "Это классы-родители для всех объектов",
+        "Это альтернатива наследованию"
+      ],
+      "correctAnswer": 0,
+      "category": "Python",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Что делает `yield` в функции?",
+      "options": [
+        "Возвращает значение и завершает функцию",
+        "Превращает функцию в генератор",
+        "Приостанавливает выполнение функции",
+        "Варианты 2 и 3 верны"
+      ],
+      "correctAnswer": 3,
+      "category": "Python",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Как работает множественное наследование?",
+      "options": [
+        "Класс может наследовать от нескольких родителей",
+        "Поддерживается только через миксины",
+        "Только если родители не конфликтуют",
+        "Варианты 1 и 3 верны"
+      ],
+      "correctAnswer": 3,
+      "category": "Python",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Что такое дескрипторы?",
+      "options": [
+        "Специальные методы класса",
+        "Объекты с __get__/__set__ методами",
+        "Альтернатива свойствам (property)",
+        "Декораторы для атрибутов"
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Hard"
+    },
+    {
+      "text": "Как работает `asyncio`?",
+      "options": [
+        "Через многопоточность",
+        "Через сопрограммы и event loop",
+        "Через параллельные процессы",
+        "Через системные потоки"
+      ],
+      "correctAnswer": 1,
+      "category": "Python",
+      "difficulty": "Hard"
     }
   ]
 }
