@@ -16,7 +16,7 @@ class GetQuestionsUseCase @Inject constructor(
                 when (difficulty) {
                     "All" -> questions
                     else -> questions.filter { q ->
-                        q.difficulty.equals(difficulty, ignoreCase = false)  // Регистр важен!
+                        q.difficulty.equals(difficulty, ignoreCase = false)
                     }.also { filtered ->
                         if (filtered.isEmpty()) {
                             Log.w("FILTER", "No $difficulty questions in $category")

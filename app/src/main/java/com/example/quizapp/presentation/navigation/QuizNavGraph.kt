@@ -2,7 +2,6 @@ package com.example.quizapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -55,6 +54,7 @@ fun QuizNavHost() {
             val viewModel: QuizViewModel = hiltViewModel()
 
             LaunchedEffect(category, difficulty) {
+                viewModel.changeDifficulty(difficulty)
                 viewModel.loadQuestions(category)
             }
 
@@ -68,7 +68,6 @@ fun QuizNavHost() {
                 onBack = { navController.popBackStack() }
             )
         }
-
         composable(
             route = Routes.RESULTS,
             arguments = listOf(
@@ -77,21 +76,13 @@ fun QuizNavHost() {
             )
         ) { backStackEntry ->
             val score = backStackEntry.arguments?.getInt("score") ?: 0
-            val total = backStackEntry.arguments?.getInt("total") ?: 1
-            val category = remember {
-                navController.previousBackStackEntry?.arguments?.getString("category")
-            }
+            val total = backStackEntry.arguments?.getInt("total") ?: 0
+            val viewModel: QuizViewModel = hiltViewModel()
 
             QuizResultScreen(
                 score = score,
                 totalQuestions = total,
-                onRestart = {
-                    category?.let {
-                        navController.navigate(Routes.buildQuizRoute(it)) {
-                            popUpTo(Routes.RESULTS) { inclusive = true }
-                        }
-                    }
-                },
+                viewModel = viewModel,
                 onBackToCategories = {
                     navController.popBackStack(Routes.CATEGORIES, inclusive = false)
                 }

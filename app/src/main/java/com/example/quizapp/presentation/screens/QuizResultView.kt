@@ -8,13 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quizapp.R
+import com.example.quizapp.presentation.viewmodel.QuizViewModel
 
 @Composable
 fun QuizResultScreen(
     score: Int,
     totalQuestions: Int,
-    onRestart: () -> Unit,
+    viewModel: QuizViewModel = hiltViewModel(),
     onBackToCategories: () -> Unit
 ) {
     val percentage = (score.toFloat() / totalQuestions * 100).toInt()
@@ -54,7 +56,7 @@ fun QuizResultScreen(
         Spacer(modifier = Modifier.height(48.dp))
 
         Button(
-            onClick = onRestart,
+            onClick = { viewModel.restartQuiz() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.restart))

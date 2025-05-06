@@ -29,7 +29,6 @@ import com.example.quizapp.presentation.components.ErrorScreen
 import com.example.quizapp.presentation.components.FullScreenLoader
 import androidx.compose.runtime.*
 import com.example.quizapp.R
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.quizapp.domain.model.Question
 import com.example.quizapp.presentation.viewmodel.QuizViewModel
@@ -41,7 +40,6 @@ fun QuizScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
 
     LaunchedEffect(uiState.isQuizFinished) {
         if (uiState.isQuizFinished && uiState.questions.isNotEmpty()) {

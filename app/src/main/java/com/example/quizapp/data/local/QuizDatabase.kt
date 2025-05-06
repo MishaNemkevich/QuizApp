@@ -6,11 +6,11 @@ import androidx.room.TypeConverters
 import com.example.quizapp.data.LocalDateTimeConverter
 
 @Database(
-    entities = [QuizResult::class], // Только результаты
-    version = 3, // Сбрасываем версию
+    entities = [QuizResult::class],
+    version = 3,
     exportSchema = false
 )
-@TypeConverters(LocalDateTimeConverter::class) // Только конвертер даты
+@TypeConverters(LocalDateTimeConverter::class)
 abstract class QuizDatabase : RoomDatabase() {
-    abstract fun resultsDao(): ResultsDao // Переименованный DAO
+    abstract fun resultsDao(): ResultsDao
 }

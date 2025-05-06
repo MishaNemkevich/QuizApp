@@ -25,11 +25,23 @@ class QuizViewModel @Inject constructor(
     private val _difficulty = MutableStateFlow("All")
     val difficulty: StateFlow<String> = _difficulty.asStateFlow()
 
+    private val _category = MutableStateFlow("")
+    val category: StateFlow<String> = _category.asStateFlow()
+
     private val _uiState = MutableStateFlow(QuizUiState())
     val uiState: StateFlow<QuizUiState> = _uiState
 
     fun loadQuestions(category: String) {
-        _uiState.update { it.copy(isLoading = true, error = null) }
+        _category.value = category
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                error = null,
+                isQuizFinished = false,
+                currentQuestionIndex = 0,
+                score = 0
+            )
+        }
 
         viewModelScope.launch {
             getQuestionsUseCase(category, _difficulty.value)
@@ -47,9 +59,7 @@ class QuizViewModel @Inject constructor(
                             questions = questions.shuffled(),
                             isLoading = false,
                             isQuizFinished = questions.isEmpty(),
-                            error = if (questions.isEmpty()) "No questions available" else null,
-                            currentQuestionIndex = 0,
-                            score = 0
+                            error = if (questions.isEmpty()) "No questions available" else null
                         )
                     }
                 }
@@ -99,12 +109,32 @@ class QuizViewModel @Inject constructor(
 
     fun changeDifficulty(difficulty: String) {
         _difficulty.value = difficulty
+        if (_category.value.isNotEmpty()) {
+            loadQuestions(_category.value)
+        }
     }
 
     fun resetQuiz() {
-        _uiState.update { QuizUiState() }
+        _uiState.update {
+            QuizUiState(
+                questions = emptyList(),
+                currentQuestionIndex = 0,
+                score = 0,
+                isLoading = false,
+                isQuizFinished = false,
+                lastAnswerCorrect = null,
+                error = null
+            )
+        }
+    }
+    fun restartQuiz() {
+        resetQuiz()
+        if (_category.value.isNotEmpty()) {
+            loadQuestions(_category.value)
+        }
     }
 }
+
 data class QuizUiState(
     val questions: List<Question> = emptyList(),
     val currentQuestionIndex: Int = 0,
