@@ -5,6 +5,7 @@ object Routes {
     const val SETTINGS = "settings"
     const val QUIZ = "quiz/{category}/{difficulty}"
     const val RESULTS = "results/{score}/{total}"
+    const val HISTORY = "history"
 
     fun buildQuizRoute(category: String, difficulty: String = "All"): String {
         return "quiz/$category/$difficulty"

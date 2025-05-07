@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.quizapp.presentation.screens.CategoriesScreen
+import com.example.quizapp.presentation.screens.HistoryScreen
 import com.example.quizapp.presentation.screens.QuizResultScreen
 import com.example.quizapp.presentation.screens.QuizScreen
 import com.example.quizapp.presentation.screens.SettingsScreen
@@ -29,12 +30,19 @@ fun QuizNavHost() {
                 },
                 onStartQuiz = { category, difficulty ->
                     navController.navigate(Routes.buildQuizRoute(category, difficulty))
-                }
+                },
+                onHistoryClick = { navController.navigate(Routes.HISTORY) },
             )
         }
 
         composable(Routes.SETTINGS) {
             SettingsScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.HISTORY) {
+            HistoryScreen(
                 onBack = { navController.popBackStack() }
             )
         }

@@ -12,4 +12,6 @@ interface QuizRepository {
     fun getAllResults(): Flow<List<QuizResult>>
     suspend fun isEmpty(): Boolean
     fun getQuestionsByCategoryAndDifficulty(category: String, difficulty: String?): Flow<List<Question>>
+    fun getQuizHistory(): Flow<List<QuizResult>>
+    fun getQuizHistoryByCategory(category: String): Flow<List<QuizResult>>
 }

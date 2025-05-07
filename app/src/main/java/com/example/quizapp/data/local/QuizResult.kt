@@ -24,5 +24,5 @@ data class QuizResult(
     val score: Int,
     val totalQuestions: Int,
     val difficulty: String,
-    val date: LocalDateTime // Изменено с Long на LocalDateTime
+    val date: LocalDateTime? // Изменено с Long на LocalDateTime
 )

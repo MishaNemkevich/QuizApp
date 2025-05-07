@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
@@ -33,6 +34,7 @@ import com.example.quizapp.presentation.viewmodel.CategoriesViewModel
 fun CategoriesScreen(
     onStartQuiz: (category: String, difficulty: String) -> Unit,
     onSettingsClick: () -> Unit,
+    onHistoryClick: () -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -55,15 +57,30 @@ fun CategoriesScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onSettingsClick,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Настройки темы"
-                )
+                FloatingActionButton(
+                    onClick = onHistoryClick,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.History,
+                        contentDescription = "История"
+                    )
+                }
+                FloatingActionButton(
+                    onClick = onSettingsClick,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Настройки"
+                    )
+                }
             }
         }
     ) { innerPadding ->

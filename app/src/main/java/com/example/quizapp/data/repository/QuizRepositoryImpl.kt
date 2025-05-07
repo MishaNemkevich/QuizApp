@@ -30,6 +30,14 @@ class QuizRepositoryImpl @Inject constructor(
         emit(getAvailableCategories())
     }
 
+    override fun getQuizHistory(): Flow<List<QuizResult>> {
+        return resultsDao.getAllResults()
+    }
+
+    override fun getQuizHistoryByCategory(category: String): Flow<List<QuizResult>> {
+        return resultsDao.getAllResults()
+    }
+
     override fun getQuestionsByCategory(category: String): Flow<List<Question>> = flow {
         emit(loadQuestions(category))
     }

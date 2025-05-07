@@ -24,7 +24,7 @@ class SaveResultUseCase @Inject constructor(
             Log.d(TAG, "Result saved successfully")
         } catch (e: Exception) {
             Log.e(TAG, "Error saving quiz result", e)
-            throw e // или обработать ошибку специфическим образом
+            throw e
         }
     }
 
