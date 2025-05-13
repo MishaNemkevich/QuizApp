@@ -14,12 +14,15 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.work.WorkManager
 import com.example.quizapp.LocalizationManager
 import com.example.quizapp.R
 import com.example.quizapp.presentation.viewmodel.SettingsViewModel
@@ -31,6 +34,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val activity = context.findActivity()
+    var notificationsEnabled = remember { mutableStateOf(true) }
 
     Column(modifier = Modifier.padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -65,6 +69,25 @@ fun SettingsScreen(
             ) {
                 Text("English")
             }
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Text(
+                text = stringResource(R.string.notification),
+                modifier = Modifier.weight(1f)
+            )
+            Switch(
+                checked = notificationsEnabled.value,
+                onCheckedChange = { enabled ->
+                    notificationsEnabled.value = enabled
+                    if (!enabled) {
+                        WorkManager.getInstance(context).cancelUniqueWork("quiz_reminder")
+                    } else {
+                        // Перезапустить WorkManager
+                    }
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))

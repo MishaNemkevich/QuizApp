@@ -28,6 +28,7 @@
     <string name="error_occurred">Ошибка</string>
     <string name="no_questions">Нет вопросов</string>
     <string name="language_settings">Языковые настройки</string>
+    <string name="notification">Увведомление</string>
 
     <string name="select_difficulty">Выберите сложность</string>
     <string name="all">Все вопросы</string>

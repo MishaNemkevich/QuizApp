@@ -2,6 +2,7 @@ package com.example.quizapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.example.quizapp.AppPreferences
 import com.example.quizapp.AppPreferencesImpl
 import com.example.quizapp.data.local.QuizDatabase
@@ -94,4 +95,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAppPreferences(impl: AppPreferencesImpl): AppPreferences = impl
+
+    @Provides
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
+        return WorkManager.getInstance(context)
+    }
 }
