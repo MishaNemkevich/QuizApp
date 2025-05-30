@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Badge
 import androidx.compose.material3.CircularProgressIndicator
@@ -53,7 +54,7 @@ fun HistoryScreen(
                 title = { Text("Quiz History") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -66,7 +67,7 @@ fun HistoryScreen(
                 }
             }
             uiState.error != null -> {
-                ErrorMessage(message = uiState.error ?: "Error loading history")
+                ErrorMessage(message = uiState.error)
             }
             uiState.results.isEmpty() -> {
                 EmptyHistoryMessage()
