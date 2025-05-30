@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
     }
     private fun setupDailyReminder() {
         val workRequest = PeriodicWorkRequestBuilder<QuizReminderWorker>(
-            1, TimeUnit.MINUTES // Повторять каждые 24 часа
+            1, TimeUnit.DAYS // Повторять каждые 24 часа
         ).build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
